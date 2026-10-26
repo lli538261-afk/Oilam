@@ -1,0 +1,1306 @@
+<!doctype html>
+<html lang="uz">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Oila Hujjatlari</title>
+<meta name="description" content="Oila hujjatlarini xavfsiz saqlash va ulashish">
+<meta name="theme-color" content="#09090a">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="apple-mobile-web-app-title" content="Oila">
+<meta name="robots" content="noindex, nofollow">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="icon" type="image/png" href="icon-192.png">
+<script>try{var __t=localStorage.getItem('oiladocs_theme');document.documentElement.setAttribute('data-theme',__t==='light'?'light':'dark')}catch(e){document.documentElement.setAttribute('data-theme','dark')}</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Outfit:wght@500;600;700;800&display=swap">
+<style>
+  /* Layout: dark smart-home dashboard look. Greeting, category chips, charcoal cards, lime accent, floating tab bar on phones. */
+  :root{
+    --bg:#09090a; --card:#18181a; --card-2:#232326; --line:rgba(255,255,255,.08);
+    --ink:#f6f6f4; --muted:#92929a;
+    --accent:#d3f23a; --on-accent:#11140a; --accent-text:#d3f23a; --accent-soft:rgba(211,242,58,.14);
+    --nav-on-bg:#232326; --nav-on-fg:#d3f23a;
+    --danger:#ff7b72; --danger-soft:rgba(255,123,114,.14);
+    --scrim:rgba(0,0,0,.72);
+    --shadow:0 10px 30px rgba(0,0,0,.35);
+    --glow:0 10px 30px rgba(211,242,58,.28);
+    --font:'DM Sans','Segoe UI',system-ui,-apple-system,sans-serif;
+    --font-d:'Outfit','DM Sans','Segoe UI',system-ui,sans-serif;
+    color-scheme:dark;
+  }
+  :root[data-theme="light"]{
+    --bg:#eff0ea; --card:#ffffff; --card-2:#e7e9df; --line:rgba(0,0,0,.08);
+    --ink:#111210; --muted:#6a6d63;
+    --accent:#cdee2c; --on-accent:#11140a; --accent-text:#4a5d00; --accent-soft:rgba(160,196,0,.18);
+    --nav-on-bg:#111210; --nav-on-fg:#d3f23a;
+    --danger:#c9372e; --danger-soft:rgba(201,55,46,.10);
+    --scrim:rgba(10,12,6,.5);
+    --shadow:0 10px 30px rgba(30,40,10,.10);
+    --glow:0 10px 30px rgba(160,196,0,.35);
+    color-scheme:light;
+  }
+
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+  html{-webkit-text-size-adjust:100%}
+  body{background:var(--bg);color:var(--ink);font-family:var(--font);font-size:16px;line-height:1.5;-webkit-font-smoothing:antialiased}
+  h1,h2,h3{font-family:var(--font-d);letter-spacing:-.02em;text-wrap:balance}
+  button,input,select{font-family:inherit;color:inherit}
+  button{touch-action:manipulation}
+  :focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+  #app{min-height:100vh;min-height:100dvh}
+
+  /* AUTH */
+  .auth{min-height:100vh;min-height:100dvh;display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr)}
+  .auth.solo{grid-template-columns:minmax(0,1fr)}
+  .auth-art{display:flex;flex-direction:column;justify-content:space-between;gap:32px;padding:56px 48px 48px max(32px,env(safe-area-inset-left,0px));min-width:0}
+  .art-copy h2{font-size:clamp(34px,4.4vw,56px);line-height:1.04;font-weight:800;max-width:11ch}
+  .art-copy h2 em{font-style:normal;color:var(--accent-text)}
+  .art-copy p{margin-top:16px;color:var(--muted);max-width:36ch;font-size:17px}
+  .art-tiles{display:grid;grid-template-columns:1fr 1fr;gap:14px;max-width:460px}
+  .art-tile{border-radius:26px;padding:20px;min-height:124px;display:flex;flex-direction:column;justify-content:space-between;background:var(--card);border:1px solid var(--line)}
+  .art-tile b{font-family:var(--font-d);font-size:19px;font-weight:700}
+  .art-tile span{font-size:12px;font-weight:700;letter-spacing:.08em;color:var(--muted)}
+  .art-tile.hot{background:var(--accent);color:var(--on-accent);border-color:transparent}
+  .art-tile.hot span{color:var(--on-accent);opacity:.7}
+  .auth-form{display:flex;align-items:center;justify-content:center;padding:32px max(16px,env(safe-area-inset-right,0px)) 32px max(16px,env(safe-area-inset-left,0px));min-width:0}
+  .auth-card{width:100%;max-width:420px;background:var(--card);border:1px solid var(--line);border-radius:30px;padding:32px;box-shadow:var(--shadow)}
+  .brand-row{display:flex;align-items:center;gap:12px;margin-bottom:24px}
+  .brand-mark{width:40px;height:40px;flex-shrink:0}
+  .brand-name{font-family:var(--font-d);font-weight:700;font-size:21px}
+  .brand-row .icon-btn{margin-left:auto}
+  .tabs{display:flex;background:var(--card-2);border-radius:999px;padding:4px;margin-bottom:22px;gap:2px}
+  .tab{flex:1;padding:10px 6px;border-radius:999px;font-weight:700;font-size:14px;color:var(--muted);cursor:pointer;border:none;background:none}
+  .tab.active{background:var(--accent);color:var(--on-accent)}
+  .fine{font-size:13px;color:var(--muted);margin-top:18px;line-height:1.5}
+  .notice{background:var(--accent-soft);color:var(--accent-text);padding:13px 16px;border-radius:18px;font-size:14px;margin-bottom:16px}
+  .center-screen{min-height:100vh;min-height:100dvh;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:16px;text-align:center;padding:24px}
+  .spin{width:30px;height:30px;border:3px solid var(--card-2);border-top-color:var(--accent);border-radius:50%;animation:spin .8s linear infinite}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  @media(max-width:760px){
+    .auth{grid-template-columns:1fr}
+    .auth-art{padding:32px max(16px,env(safe-area-inset-right,0px)) 8px max(16px,env(safe-area-inset-left,0px));gap:0}
+    .art-copy h2{font-size:34px;max-width:none}
+    .art-copy p,.art-tiles{display:none}
+    .auth-form{align-items:flex-start;padding-top:20px}
+  }
+
+  /* FORM */
+  .field{margin-bottom:18px}
+  .field label{display:block;font-size:14px;font-weight:700;margin-bottom:7px}
+  .hint{font-size:13px;color:var(--muted);margin-top:6px}
+  .input{width:100%;padding:14px 16px;border:1.5px solid transparent;border-radius:16px;background:var(--card-2);color:var(--ink);
+    outline:none;transition:border-color .15s;font-family:inherit;font-size:16px}
+  .input::placeholder{color:var(--muted)}
+  .input:focus{border-color:var(--accent)}
+  .input:disabled{opacity:.6}
+  select.input{appearance:none;-webkit-appearance:none;padding-right:42px;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2392929a' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+    background-repeat:no-repeat;background-position:right 16px center}
+  .code-input{font-family:var(--font-d);font-weight:700;letter-spacing:.14em;text-transform:uppercase}
+  .err{color:var(--danger);font-size:14px;margin-bottom:12px;min-height:20px}
+
+  /* BUTTONS */
+  .btn{padding:14px 24px;border-radius:999px;font-weight:700;font-size:15px;transition:filter .15s;
+    display:inline-flex;align-items:center;gap:8px;justify-content:center;border:none;cursor:pointer;text-decoration:none}
+  .btn-primary{background:var(--accent);color:var(--on-accent)}
+  .btn-ghost{background:var(--card-2);color:var(--ink)}
+  .btn-danger{background:var(--danger-soft);color:var(--danger)}
+  .btn:hover{filter:brightness(.93)}
+  .btn-primary:hover{filter:brightness(1.07)}
+  .btn:disabled{opacity:.4;cursor:default}
+  .btn-block{width:100%}
+  .btn-sm{padding:8px 15px;font-size:13.5px}
+  .btn svg{width:18px;height:18px}
+
+  /* SHELL */
+  .app{display:grid;grid-template-columns:264px minmax(0,1fr);min-height:100vh;min-height:100dvh}
+  .side{position:sticky;top:0;height:100vh;align-self:start;border-right:1px solid var(--line);
+    display:flex;flex-direction:column;gap:32px;padding:calc(28px + env(safe-area-inset-top,0px)) 16px 24px max(20px,env(safe-area-inset-left,0px))}
+  .side-brand{display:flex;align-items:center;gap:12px;font-family:var(--font-d);font-weight:700;font-size:20px}
+  .nav{display:flex;flex-direction:column;gap:6px}
+  .nav-btn{display:flex;align-items:center;gap:12px;padding:13px 16px;border-radius:999px;font-weight:700;font-size:15px;color:var(--muted);
+    border:none;background:none;cursor:pointer;text-align:left;position:relative}
+  .nav-btn svg{width:22px;height:22px;flex-shrink:0}
+  .nav-btn:hover{color:var(--ink)}
+  .nav-btn.active{background:var(--nav-on-bg);color:var(--nav-on-fg)}
+  .badge{margin-left:auto;background:var(--accent);color:var(--on-accent);border-radius:20px;font-size:12px;font-weight:800;padding:0 8px;line-height:20px}
+  .main{min-width:0;display:flex;flex-direction:column}
+  .topbar{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--bg);display:flex;align-items:center;justify-content:space-between;gap:12px;
+    padding:18px max(16px,env(safe-area-inset-right,0px)) 12px 36px}
+  .top-fam{min-width:0}
+  .top-fam small{display:block;font-size:12px;font-weight:700;color:var(--muted);letter-spacing:.08em;text-transform:uppercase}
+  .top-fam div{font-family:var(--font-d);font-weight:700;font-size:19px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .header-right{display:flex;align-items:center;gap:10px;min-width:0}
+  .icon-btn{width:44px;height:44px;border-radius:50%;border:none;background:var(--card);display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--ink);flex-shrink:0}
+  .icon-btn:hover{background:var(--card-2)}
+  .user-chip{display:flex;align-items:center;gap:10px;padding:5px 16px 5px 5px;border-radius:999px;background:var(--card);
+    border:1.5px solid transparent;cursor:pointer;font-size:14.5px;font-weight:700;max-width:100%;min-width:0}
+  .user-chip span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .user-chip.on{border-color:var(--accent)}
+  .avatar-sm{width:34px;height:34px;border-radius:50%;background:var(--accent);color:var(--on-accent);
+    display:flex;align-items:center;justify-content:center;font-weight:800;font-size:14px;overflow:hidden;flex-shrink:0}
+  .avatar-sm img{width:100%;height:100%;object-fit:cover}
+  .container{max-width:1060px;width:100%;padding:12px max(16px,env(safe-area-inset-right,0px)) 72px 36px}
+
+  .page-head{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;margin-bottom:24px;flex-wrap:wrap}
+  .page-head h1{font-size:38px;line-height:1.05;font-weight:800}
+  .page-sub{color:var(--muted);font-size:15px;margin-top:6px}
+  .sec-title{font-size:22px;font-weight:700;margin:28px 0 14px}
+
+  /* CATEGORY CHIPS */
+  .cats{display:flex;gap:10px;overflow-x:auto;padding-bottom:4px}
+  .cat{flex:0 0 auto;width:88px;height:82px;border-radius:24px;border:none;background:var(--card);color:var(--muted);cursor:pointer;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;gap:7px;font-size:12px;font-weight:700}
+  .cat svg{width:22px;height:22px}
+  .cat.on{background:var(--accent);color:var(--on-accent)}
+
+  /* DOCS */
+  .doc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,230px),1fr));gap:12px}
+  .doc-card{background:var(--card);border-radius:26px;padding:16px;display:flex;flex-direction:column;gap:18px;cursor:pointer;transition:transform .15s;min-width:0}
+  .doc-card:hover{transform:translateY(-2px)}
+  .doc-top{display:flex;align-items:center;gap:8px}
+  .doc-ico{width:46px;height:46px;border-radius:50%;background:var(--card-2);color:var(--accent-text);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+  .doc-ico svg{width:22px;height:22px}
+  .doc-ext{margin-left:auto;font-size:11.5px;font-weight:800;letter-spacing:.08em;padding:3px 10px;border-radius:20px;background:var(--card-2);color:var(--muted)}
+  .doc-del{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;border:none;background:var(--card-2);cursor:pointer;color:var(--muted);flex-shrink:0}
+  .doc-del svg{width:18px;height:18px}
+  .doc-del:hover{background:var(--danger-soft);color:var(--danger)}
+  .doc-bottom{display:flex;align-items:flex-end;gap:10px}
+  .doc-body{flex:1;min-width:0}
+  .doc-title{font-family:var(--font-d);font-weight:600;font-size:17px;line-height:1.25;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow-wrap:anywhere}
+  .doc-meta{color:var(--muted);font-size:13px;margin-top:4px;font-variant-numeric:tabular-nums}
+  .doc-tags{display:flex;gap:8px;align-items:center;margin-top:10px;flex-wrap:wrap}
+  .tag{font-size:12px;font-weight:700;padding:3px 11px;border-radius:20px}
+  .tag-family{background:var(--accent-soft);color:var(--accent-text)}
+  .tag-private{background:var(--card-2);color:var(--muted)}
+  .go{width:42px;height:42px;border-radius:50%;background:var(--accent);color:var(--on-accent);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+  .icon-btn svg,.modal-close svg{width:18px;height:18px}
+  .go svg{width:18px;height:18px}
+
+  /* EMPTY */
+  .empty{text-align:center;padding:64px 20px;color:var(--muted);background:var(--card);border-radius:28px}
+  .empty svg{width:56px;height:56px;color:var(--accent-text);margin-bottom:12px}
+  .empty h3{color:var(--ink);font-size:20px;margin-bottom:4px}
+
+  /* MEMBERS */
+  .member-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,270px),1fr));gap:12px}
+  .member-card{background:var(--card);border-radius:28px;padding:22px;display:flex;gap:16px;align-items:flex-start;min-width:0}
+  .member-card.me{background:var(--accent);color:var(--on-accent)}
+  .member-card.link{cursor:pointer;transition:transform .15s}
+  .member-card.link:hover{transform:translateY(-2px)}
+  .avatar-lg{width:60px;height:60px;border-radius:50%;background:var(--card-2);color:var(--ink);display:flex;align-items:center;justify-content:center;
+    font-family:var(--font-d);font-weight:800;font-size:24px;flex-shrink:0;overflow:hidden}
+  .me .avatar-lg{background:rgba(0,0,0,.14);color:var(--on-accent)}
+  .avatar-lg img{width:100%;height:100%;object-fit:cover}
+  .member-name{font-family:var(--font-d);font-weight:700;font-size:19px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;overflow-wrap:anywhere}
+  .you{font-family:var(--font);font-size:12px;color:var(--accent-text);background:var(--accent-soft);padding:1px 9px;border-radius:20px;font-weight:700}
+  .me .you{background:rgba(0,0,0,.14);color:var(--on-accent)}
+  .member-role{font-size:14px;font-weight:600;opacity:.8;margin:2px 0 10px}
+  .member-line{font-size:13.5px;opacity:.7;margin-top:3px;overflow-wrap:anywhere}
+  .member-count{display:inline-block;margin-top:12px;font-size:13px;font-weight:700;padding:3px 12px;border-radius:20px;background:var(--accent-soft);color:var(--accent-text)}
+  .me .member-count{background:rgba(0,0,0,.14);color:var(--on-accent)}
+  .back{background:none;border:none;color:var(--accent-text);font-weight:700;font-size:15px;cursor:pointer;display:inline-flex;align-items:center;gap:6px;margin-bottom:16px;padding:4px 0}
+  .back:hover{text-decoration:underline}
+  .detail-head{margin-bottom:8px;max-width:460px}
+
+  /* CARDS */
+  .card{background:var(--card);border-radius:28px;padding:26px;margin-bottom:12px}
+  .card h3{font-size:21px;margin-bottom:18px;font-weight:700}
+  .form-row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  @media(max-width:600px){.form-row{grid-template-columns:1fr}}
+  .photo-row{display:flex;align-items:center;gap:16px;margin-bottom:20px}
+  .photo-preview{width:72px;height:96px;border-radius:18px;background:var(--card-2);display:flex;align-items:center;justify-content:center;overflow:hidden;
+    font-size:13px;font-weight:700;color:var(--muted);text-align:center;flex-shrink:0}
+  .photo-preview img{width:100%;height:100%;object-fit:cover}
+
+  .list-item{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:14px 0;border-bottom:1px solid var(--line);flex-wrap:wrap}
+  .list-item:last-child{border-bottom:none;padding-bottom:0}
+  .list-item>div:first-child{min-width:0}
+  .list-item-title{font-weight:700;font-size:15.5px;overflow-wrap:anywhere}
+  .list-item-sub{color:var(--muted);font-size:13.5px;margin-top:1px;overflow-wrap:anywhere}
+  .row-actions{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+  .sel{width:auto;padding:8px 38px 8px 14px;font-size:14px;border-radius:999px;background-position:right 12px center}
+  .muted-line{color:var(--muted);font-size:15px}
+  .note{background:var(--accent-soft);color:var(--accent-text);padding:13px 16px;border-radius:18px;font-size:14px;margin-bottom:16px}
+  .invite-code{font-family:var(--font-d);font-weight:800;font-size:30px;letter-spacing:.14em;margin:4px 0 14px;overflow-wrap:anywhere}
+
+  /* MODAL */
+  #modalRoot{position:fixed;inset:0;z-index:100;display:none}
+  #modalRoot.open{display:block}
+  .modal-backdrop{position:absolute;inset:0;background:var(--scrim);display:flex;align-items:center;justify-content:center;
+    padding:max(20px,env(safe-area-inset-top,0px)) max(20px,env(safe-area-inset-right,0px)) max(20px,env(safe-area-inset-bottom,0px)) max(20px,env(safe-area-inset-left,0px))}
+  .modal-card{background:var(--card);color:var(--ink);border-radius:30px;padding:26px;width:100%;max-width:500px;max-height:90vh;max-height:90dvh;overflow:auto;box-shadow:var(--shadow)}
+  .modal-head{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:20px}
+  .modal-head h3{font-size:22px;font-weight:700;overflow-wrap:anywhere}
+  .modal-close{width:38px;height:38px;border-radius:50%;background:var(--card-2);border:none;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0}
+  .modal-close:hover{filter:brightness(1.15)}
+  .preview{margin-bottom:18px;border-radius:20px;overflow:auto;background:var(--card-2);max-height:55vh}
+  .preview img{width:100%;display:block}
+  .preview iframe{width:100%;height:55vh;border:none;display:block;background:#fff}
+  .preview-text{white-space:pre-wrap;padding:18px;font-size:14px;font-family:ui-monospace,monospace;overflow-wrap:anywhere}
+  .preview-none{text-align:center;padding:44px 20px;color:var(--muted);font-size:15px}
+  .preview-load{display:flex;align-items:center;justify-content:center;padding:48px}
+  .modal-foot{display:flex;justify-content:flex-end;gap:10px;flex-wrap:wrap}
+  .confirm-text{color:var(--muted);margin-bottom:22px}
+  .radio-row{display:flex;gap:10px;flex-wrap:wrap}
+  .radio{flex:1;min-width:140px;display:flex;align-items:center;gap:10px;padding:13px 16px;background:var(--card-2);border:1.5px solid transparent;border-radius:999px;cursor:pointer;font-size:15px;font-weight:600}
+  .radio:has(input:checked){border-color:var(--accent)}
+  .radio input{accent-color:var(--accent)}
+
+  /* TOAST */
+  #toast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);z-index:200;background:var(--ink);color:var(--bg);
+    padding:12px 20px;border-radius:999px;font-size:15px;font-weight:600;box-shadow:var(--shadow);max-width:min(92vw,440px);text-align:center;display:none}
+  #toast.show{display:block}
+
+  /* PHONE: sidebar becomes a floating tab bar */
+  @media(max-width:860px){
+    .app{grid-template-columns:minmax(0,1fr)}
+    .side{position:fixed;top:auto;height:auto;z-index:50;flex-direction:row;gap:0;border:1px solid var(--line);background:var(--card);border-radius:30px;box-shadow:var(--shadow);
+      left:max(12px,env(safe-area-inset-left,0px));right:max(12px,env(safe-area-inset-right,0px));bottom:calc(12px + env(safe-area-inset-bottom,0px));padding:8px}
+    .side-brand{display:none}
+    .nav{flex-direction:row;width:100%;gap:4px}
+    .nav-btn{flex:1;flex-direction:column;gap:3px;padding:9px 4px;font-size:12px;align-items:center;text-align:center;justify-content:center;min-width:0;border-radius:22px}
+    .nav-btn svg{width:23px;height:23px}
+    .badge{position:absolute;top:3px;right:calc(50% - 28px);margin:0;line-height:17px;font-size:11px;padding:0 6px}
+    .topbar{padding-left:max(16px,env(safe-area-inset-left,0px))}
+    .container{padding-left:max(16px,env(safe-area-inset-left,0px));padding-bottom:170px}
+    .page-head h1{font-size:30px}
+    .fab{position:fixed;z-index:45;right:max(16px,env(safe-area-inset-right,0px));bottom:calc(96px + env(safe-area-inset-bottom,0px));box-shadow:var(--glow);padding:15px 24px}
+    #toast{bottom:calc(170px + env(safe-area-inset-bottom,0px))}
+  }
+  @media(max-width:420px){ .user-chip span{max-width:100px} }
+  @media(prefers-reduced-motion:reduce){*{transition:none!important;animation-duration:.01ms!important}}
+</style>
+</head>
+<body>
+<div id="app"><div class="center-screen"><div class="spin"></div></div></div>
+<div id="modalRoot"></div>
+<div id="toast" role="status" aria-live="polite"></div>
+<noscript><p style="padding:24px">Bu ilova ishlashi uchun JavaScript yoqilgan bo'lishi kerak.</p></noscript>
+
+<script src="config.js"></script>
+<script>
+/* Supabase kutubxonasi: bir nechta manbadan yuklanadi (birinchisi ishlamasa, keyingisi) */
+(function(){
+  var urls = [
+    'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js',
+    'https://unpkg.com/@supabase/supabase-js@2/dist/umd/supabase.js',
+    'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.3/dist/umd/supabase.js'
+  ];
+  window.__sbReady = new Promise(function(resolve, reject){
+    var i = 0;
+    function next(){
+      if(window.supabase && window.supabase.createClient) return resolve();
+      if(i >= urls.length) return reject(new Error('lib'));
+      var s = document.createElement('script');
+      s.src = urls[i++];
+      s.onload = function(){ (window.supabase && window.supabase.createClient) ? resolve() : next(); };
+      s.onerror = next;
+      document.head.appendChild(s);
+    }
+    next();
+  });
+})();
+</script>
+<script>
+'use strict';
+/* ================= SOZLAMA ================= */
+const CFG = window.OILA_CONFIG || {};
+const CONFIGURED = !!(CFG.SUPABASE_URL && CFG.SUPABASE_ANON_KEY &&
+  /^https?:\/\//i.test(CFG.SUPABASE_URL) && !/YOUR|XXXX|LOYIHA/i.test(CFG.SUPABASE_URL + CFG.SUPABASE_ANON_KEY));
+const BUCKET = 'documents';
+const MAX_FILE = 10 * 1024 * 1024;
+
+let sb = null;
+const S = { session: null, me: null, family: null, members: [], docs: [], loadedAt: 0 };
+let currentTab = 'docs', viewMemberId = null, docsFilter = 'all', inviteCache = null;
+let inviteFromUrl = '';
+
+/* ================= YORDAMCHILAR ================= */
+const $ = (id) => document.getElementById(id);
+function lsGet(k){ try{ return localStorage.getItem(k); }catch(e){ return null; } }
+function lsSet(k, v){ try{ localStorage.setItem(k, v); }catch(e){} }
+function escapeHtml(s){ return String(s == null ? '' : s).replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+function formatSize(b){ b = Number(b) || 0; if(b < 1024) return b + ' B'; if(b < 1048576) return (b/1024).toFixed(1) + ' KB'; return (b/1048576).toFixed(1) + ' MB'; }
+function formatDate(ts){
+  const M = ['yan','fev','mar','apr','may','iyn','iyl','avg','sen','okt','noy','dek'];
+  const d = new Date(ts);
+  if(isNaN(d)) return '';
+  return String(d.getDate()).padStart(2,'0') + ' ' + M[d.getMonth()] + ' ' + d.getFullYear();
+}
+function uuid(){
+  if(window.crypto && crypto.randomUUID) return crypto.randomUUID();
+  const b = crypto.getRandomValues(new Uint8Array(16)); b[6] = (b[6] & 15) | 64; b[8] = (b[8] & 63) | 128;
+  const h = [...b].map(x=>x.toString(16).padStart(2,'0')).join('');
+  return `${h.slice(0,8)}-${h.slice(8,12)}-${h.slice(12,16)}-${h.slice(16,20)}-${h.slice(20)}`;
+}
+function greeting(){ const h = new Date().getHours(); return h < 5 ? 'Xayrli tun' : h < 12 ? 'Xayrli tong' : h < 18 ? 'Xayrli kun' : 'Xayrli kech'; }
+
+const RELATIONS = ['Ota','Ona','Aka','Opa','Uka','Singil','Farzand','Buvi','Bobo','Boshqa'];
+function relOptions(sel, withBlank){
+  return (withBlank ? '<option value="">Tanlanmagan</option>' : '<option value="" disabled selected>Tanlang</option>') +
+    RELATIONS.map(r=>`<option value="${r}" ${r===sel?'selected':''}>${r}</option>`).join('');
+}
+
+function errMsg(e){
+  const m = String((e && (e.message || e.error_description || e.msg)) || e || '');
+  if(/invalid login credentials/i.test(m)) return 'Email yoki parol xato';
+  if(/already registered|already been registered/i.test(m)) return "Bu email allaqachon ro'yxatdan o'tgan. «Kirish» bo'limidan kiring";
+  if(/email not confirmed/i.test(m)) return 'Email tasdiqlanmagan. Emailingizdagi xatni tekshiring';
+  if(/at least \d+ char/i.test(m)) return "Parol kamida 6 belgidan iborat bo'lsin";
+  if(/rate limit|too many|over_email/i.test(m)) return "Juda ko'p urinish bo'ldi. Biroz kutib, qayta urinib ko'ring";
+  if(/failed to fetch|networkerror|load failed|network request/i.test(m)) return "Internet bilan aloqa yo'q. Ulanishni tekshiring";
+  if(/database error saving new user/i.test(m)) return "Ro'yxatdan o'tib bo'lmadi. Taklif kodi yoki kalitni tekshiring";
+  if(/jwt expired|invalid jwt|refresh token/i.test(m)) return 'Seans tugagan. Qayta kiring';
+  if(/row-level security|permission denied/i.test(m)) return 'Bu amal uchun ruxsat yo\'q';
+  if(/payload too large|exceeded the maximum|too large/i.test(m)) return 'Fayl juda katta (10 MB gacha)';
+  return m || 'Xatolik yuz berdi';
+}
+
+/* ================= BELGILAR ================= */
+const STAR = `<svg class="brand-mark" viewBox="0 0 40 40" aria-hidden="true"><rect width="40" height="40" rx="20" fill="var(--accent)"/><path d="M11.5 14a2.5 2.5 0 0 1 2.5-2.5h4.6l2.4 2.8h5.5a2.5 2.5 0 0 1 2.5 2.5v9.7a2.5 2.5 0 0 1-2.5 2.5H14a2.5 2.5 0 0 1-2.5-2.5z" fill="var(--on-accent)"/></svg>`;
+const ico = (d, extra) => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="${extra||1.8}" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${d}</svg>`;
+const IC = {
+  file: ico('<path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h4"/>'),
+  image: ico('<rect x="3.5" y="4.5" width="17" height="15" rx="3"/><circle cx="9" cy="10" r="1.6"/><path d="M4 17l5-4.5 4 3.5 3-2.5 4 3.5"/>'),
+  arrow: ico('<path d="M7 17L17 7M8 7h9v9"/>', 2.2),
+  trash: ico('<path d="M4 7h16M9.5 7V4.5h5V7M6.5 7l.8 12.5h9.4L17.5 7"/>', 1.7),
+  lock: ico('<rect x="5" y="10.5" width="14" height="10" rx="3"/><path d="M8.5 10.5V8a3.5 3.5 0 0 1 7 0v2.5"/>'),
+  users: ico('<circle cx="9" cy="8" r="3.2"/><path d="M3 20c0-3.3 2.7-5.5 6-5.5s6 2.2 6 5.5"/><circle cx="17" cy="9" r="2.4"/><path d="M17 14.3c2.4 0 4.2 1.6 4.2 4"/>'),
+  grid: ico('<rect x="4" y="4" width="6.5" height="6.5" rx="2"/><rect x="13.5" y="4" width="6.5" height="6.5" rx="2"/><rect x="4" y="13.5" width="6.5" height="6.5" rx="2"/><rect x="13.5" y="13.5" width="6.5" height="6.5" rx="2"/>'),
+  plus: ico('<path d="M12 5v14M5 12h14"/>', 2.4),
+  admin: ico('<path d="M12 3l7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6z"/><path d="M9 12l2 2 4-4"/>'),
+  share: ico('<path d="M12 15V4M8 8l4-4 4 4"/><path d="M5 12v6a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-6"/>'),
+  copy: ico('<rect x="8" y="8" width="11" height="12" rx="2.5"/><path d="M5 15V6a2 2 0 0 1 2-2h8"/>'),
+  folder: ico('<path d="M3 7a2 2 0 0 1 2-2h4l2 2.5h8a2 2 0 0 1 2 2V17a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>', 1.6),
+  up: ico('<path d="M6 15l6-6 6 6"/>', 2.2),
+  down: ico('<path d="M6 9l6 6 6-6"/>', 2.2)
+};
+const SUN = `<svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><circle cx="10" cy="10" r="3.6"/><path d="M10 2.2v2M10 15.8v2M2.2 10h2M15.8 10h2M4.5 4.5l1.4 1.4M14.1 14.1l1.4 1.4M4.5 15.5l1.4-1.4M14.1 5.9l1.4-1.4"/></svg>`;
+const MOON = `<svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round" aria-hidden="true"><path d="M16.5 11.8A7 7 0 0 1 8.2 3.5a7 7 0 1 0 8.3 8.3z"/></svg>`;
+
+/* ================= REJIM (yorug' / qorong'u) ================= */
+function themeNow(){ return document.documentElement.getAttribute('data-theme') === 'light' ? 'light' : 'dark'; }
+function bindTheme(){
+  document.querySelectorAll('[data-themebtn]').forEach(b=>{
+    b.innerHTML = themeNow() === 'dark' ? SUN : MOON;
+    b.onclick = ()=>{
+      const n = themeNow() === 'dark' ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', n);
+      lsSet('oiladocs_theme', n);
+      document.querySelectorAll('[data-themebtn]').forEach(x=>{ x.innerHTML = n === 'dark' ? SUN : MOON; });
+    };
+  });
+}
+const THEME_BTN = `<button class="icon-btn" type="button" data-themebtn aria-label="Yorug' yoki qorong'u rejim" title="Yorug' yoki qorong'u rejim"></button>`;
+
+/* ================= XABAR VA OYNALAR ================= */
+let toastTimer = null;
+function toast(msg){
+  const t = $('toast'); t.textContent = msg; t.classList.add('show');
+  clearTimeout(toastTimer); toastTimer = setTimeout(()=>t.classList.remove('show'), 4000);
+}
+let modalCleanup = null;
+function showModal(html, onClose, onMount){
+  const root = $('modalRoot');
+  root.innerHTML = '<div class="modal-backdrop"><div class="modal-card" role="dialog" aria-modal="true">' + html + '</div></div>';
+  root.classList.add('open');
+  modalCleanup = onClose || null;
+  const doClose = ()=>{
+    root.classList.remove('open'); root.innerHTML = '';
+    document.removeEventListener('keydown', onKey);
+    if(modalCleanup){ const cb = modalCleanup; modalCleanup = null; cb(); }
+  };
+  const onKey = (e)=>{ if(e.key === 'Escape') doClose(); };
+  document.addEventListener('keydown', onKey);
+  const backdrop = root.querySelector('.modal-backdrop');
+  backdrop.onclick = (e)=>{ if(e.target === backdrop) doClose(); };
+  root.querySelectorAll('[data-close]').forEach(b=>b.onclick = doClose);
+  window._modalClose = doClose;
+  if(onMount) onMount(root.querySelector('.modal-card'));
+}
+function closeModal(){ if(window._modalClose) window._modalClose(); }
+function modalOpen(){ return $('modalRoot').classList.contains('open'); }
+const CLOSE_BTN = `<button class="modal-close" data-close aria-label="Yopish">&#10005;</button>`;
+
+function askConfirm(title, text, okLabel){
+  return new Promise((resolve)=>{
+    let answer = false;
+    showModal(`
+      <div class="modal-head"><h3>${escapeHtml(title)}</h3>${CLOSE_BTN}</div>
+      <p class="confirm-text">${escapeHtml(text)}</p>
+      <div class="modal-foot">
+        <button class="btn btn-ghost" data-close>Bekor qilish</button>
+        <button class="btn btn-danger" id="confirmOk">${escapeHtml(okLabel || "O'chirish")}</button>
+      </div>`, ()=>resolve(answer), (root)=>{
+        root.querySelector('#confirmOk').onclick = ()=>{ answer = true; closeModal(); };
+        root.querySelector('#confirmOk').focus();
+      });
+  });
+}
+
+/* tugmani band qilib amalni bajaradi */
+async function act(btn, fn){
+  if(btn){ if(btn.disabled) return; btn.disabled = true; }
+  try{ await fn(); }
+  catch(e){ console.error(e); toast(errMsg(e)); }
+  finally{ if(btn && btn.isConnected) btn.disabled = false; }
+}
+function unwrap(res){ if(res && res.error) throw res.error; return res; }
+
+/* ================= MA'LUMOTLAR ================= */
+async function loadAll(){
+  const uid = S.session.user.id;
+  const pr = unwrap(await sb.from('profiles').select('*').eq('id', uid).maybeSingle());
+  S.me = pr.data || null;
+  S.family = null; S.members = []; S.docs = [];
+  if(!S.me){ S.loadedAt = Date.now(); return; }
+  const fr = unwrap(await sb.from('families').select('id,name').maybeSingle());
+  S.family = fr.data || { id: S.me.family_id, name: 'Oila' };
+  if(S.me.status === 'approved'){
+    const [mr, dr] = await Promise.all([
+      sb.from('profiles').select('*').order('sort_order', { ascending: true }),
+      sb.from('documents').select('*').order('created_at', { ascending: false })
+    ]);
+    S.members = unwrap(mr).data || [];
+    S.docs = unwrap(dr).data || [];
+  } else {
+    S.members = [S.me];
+  }
+  S.loadedAt = Date.now();
+}
+const approvedMembers = () => S.members.filter(m=>m.status === 'approved').sort((a,b)=>(a.sort_order||0)-(b.sort_order||0));
+const pendingMembers = () => S.members.filter(m=>m.status === 'pending');
+const isAdmin = () => !!(S.me && S.me.role === 'admin' && S.me.status === 'approved');
+const memberById = (id) => S.members.find(m=>m.id === id);
+const docsOf = (ownerId) => S.docs.filter(d=>d.owner_id === ownerId).sort((a,b)=>new Date(b.created_at) - new Date(a.created_at));
+
+async function refresh(silent){
+  try{
+    await loadAll();
+    if(modalOpen()) return;
+    renderRoot(true);
+  }catch(e){
+    if(!silent) toast(errMsg(e));
+  }
+}
+
+/* ================= KIRISH / RO'YXATDAN O'TISH ================= */
+function renderNotConfigured(){
+  $('app').innerHTML = `<div class="center-screen"><div class="auth-card" style="max-width:480px;text-align:left">
+    <div class="brand-row">${STAR}<span class="brand-name">Oila Hujjatlari</span></div>
+    <h2 style="font-size:22px;margin-bottom:10px">Ilova hali sozlanmagan</h2>
+    <p class="muted-line">«config.js» faylida Supabase manzili (SUPABASE_URL) va kaliti (SUPABASE_ANON_KEY) hali yozilmagan. Qo'llanmadagi 2-qadamni bajaring.</p></div></div>`;
+}
+function renderFatal(msg){
+  $('app').innerHTML = `<div class="center-screen"><div class="auth-card" style="max-width:440px;text-align:center">
+    <h2 style="font-size:22px;margin-bottom:10px">Ulanib bo'lmadi</h2>
+    <p class="muted-line" style="margin-bottom:20px">${escapeHtml(msg)}</p>
+    <button class="btn btn-primary" id="retryBtn">Qayta urinish</button></div></div>`;
+  $('retryBtn').onclick = ()=>location.reload();
+}
+function renderLoading(){ $('app').innerHTML = '<div class="center-screen"><div class="spin"></div></div>'; }
+
+function renderAuth(kind){
+  $('app').innerHTML = `
+    <div class="auth">
+      <aside class="auth-art">
+        <div class="art-copy">
+          <h2>Oila hujjatlari <em>bir joyda</em></h2>
+          <p>Passport, guvohnoma, shartnoma. Har bir hujjatni oilaga ochiq yoki faqat o'zingiz uchun saqlang.</p>
+        </div>
+        <div class="art-tiles" aria-hidden="true">
+          <div class="art-tile hot"><b>Passport</b><span>PDF</span></div>
+          <div class="art-tile"><b>Guvohnoma</b><span>RASM</span></div>
+          <div class="art-tile"><b>Shartnoma</b><span>PDF</span></div>
+          <div class="art-tile"><b>Diplom</b><span>RASM</span></div>
+        </div>
+      </aside>
+      <div class="auth-form">
+        <div class="auth-card">
+          <div class="brand-row">${STAR}<span class="brand-name">Oila Hujjatlari</span>${THEME_BTN}</div>
+          <div class="tabs">
+            <button class="tab" data-authtab="login">Kirish</button>
+            <button class="tab" data-authtab="register">Ro'yxatdan o'tish</button>
+          </div>
+          <div id="authForm"></div>
+          <p class="fine">Hujjatlar yopiq omborda saqlanadi. «Yashirin» deb belgilangan hujjatni oila a'zolari ko'rmaydi.</p>
+        </div>
+      </div>
+    </div>`;
+  document.querySelectorAll('[data-authtab]').forEach(b=>{ b.onclick = ()=>renderAuth(b.dataset.authtab); });
+  document.querySelectorAll('[data-authtab]').forEach(b=>b.classList.toggle('active', b.dataset.authtab === (kind || 'login')));
+  bindTheme();
+  if((kind || 'login') === 'login') renderLoginForm($('authForm'));
+  else renderRegisterForm($('authForm'), { withCreds: true });
+}
+
+function renderLoginForm(el, notice){
+  el.innerHTML = `
+    ${notice ? `<div class="notice">${escapeHtml(notice)}</div>` : ''}
+    <form id="loginForm" novalidate>
+      <div class="field"><label for="loginEmail">Email</label>
+        <input class="input" type="email" id="loginEmail" required placeholder="siz@example.com" autocomplete="username" autocapitalize="none" inputmode="email"></div>
+      <div class="field"><label for="loginPass">Parol</label>
+        <input class="input" type="password" id="loginPass" required placeholder="••••••" autocomplete="current-password"></div>
+      <div class="err" id="authErr" role="alert"></div>
+      <button class="btn btn-primary btn-block" type="submit">Kirish</button>
+    </form>`;
+  $('loginForm').onsubmit = async (e)=>{
+    e.preventDefault();
+    const btn = e.target.querySelector('button[type=submit]'), err = $('authErr');
+    const email = $('loginEmail').value.trim(), pass = $('loginPass').value;
+    if(!email || !pass){ err.textContent = 'Email va parolni kiriting'; return; }
+    err.textContent = ''; btn.disabled = true; btn.textContent = 'Kirilmoqda…';
+    try{
+      const r = unwrap(await sb.auth.signInWithPassword({ email, password: pass }));
+      S.session = r.data.session;
+      renderLoading();
+      await enter();
+    }catch(ex){
+      err.textContent = errMsg(ex); btn.disabled = false; btn.textContent = 'Kirish';
+      if($('authForm') === null) renderAuth('login');
+    }
+  };
+}
+
+/* Ro'yxatdan o'tish formasi. withCreds=false: akkaunt bor, faqat oilaga ulanish (profil yo'q holat) */
+function renderRegisterForm(el, opts){
+  const withCreds = !!opts.withCreds;
+  let mode = inviteFromUrl ? 'join' : (opts.mode || 'join');
+  const draw = ()=>{
+    el.innerHTML = `
+      <div class="tabs" role="tablist" style="margin-bottom:18px">
+        <button class="tab ${mode==='join'?'active':''}" type="button" data-mode="join">Oilaga qo'shilish</button>
+        <button class="tab ${mode==='create'?'active':''}" type="button" data-mode="create">Yangi oila</button>
+      </div>
+      <form id="regForm" novalidate data-fmode="${mode}">
+        <div class="field"><label for="regName">Ism familiya</label>
+          <input class="input" id="regName" name="name" required placeholder="Aliyev Vali" autocomplete="name"></div>
+        ${withCreds ? `
+        <div class="field"><label for="regEmail">Email</label>
+          <input class="input" type="email" id="regEmail" name="email" required placeholder="siz@example.com" autocomplete="username" autocapitalize="none" inputmode="email"></div>
+        <div class="field"><label for="regPass">Parol</label>
+          <input class="input" type="password" id="regPass" name="password" required minlength="6" placeholder="Kamida 6 belgi" autocomplete="new-password"></div>` : ''}
+        <div class="field"><label for="regRel">Oiladagi o'rningiz</label>
+          <select class="input" id="regRel" name="relation" required>${relOptions('', false)}</select></div>
+        ${mode === 'join' ? `
+        <div class="field"><label for="regCode">Taklif kodi</label>
+          <input class="input code-input" id="regCode" name="code" required maxlength="10" placeholder="XXXXXXXXXX" autocomplete="off" autocapitalize="characters" value="${escapeHtml(inviteFromUrl)}">
+          <div class="hint">Kodni oila admini beradi. Admin tasdiqlagach hujjatlarga kirasiz.</div></div>` : `
+        <div class="field"><label for="regFamily">Oila nomi</label>
+          <input class="input" id="regFamily" name="family" required maxlength="80" placeholder="Masalan: Karimovlar"></div>
+        <div class="field"><label for="regKey">Oila yaratish kaliti</label>
+          <input class="input code-input" id="regKey" name="key" required maxlength="10" placeholder="XXXXXXXXXX" autocomplete="off" autocapitalize="characters">
+          <div class="hint">Bu kalit ilova egasida bor. Yangi oilani faqat u yarata oladi.</div></div>`}
+        <div class="err" id="authErr" role="alert"></div>
+        <button class="btn btn-primary btn-block" type="submit">${withCreds ? "Ro'yxatdan o'tish" : 'Davom etish'}</button>
+      </form>`;
+    el.querySelectorAll('[data-mode]').forEach(b=>{ b.onclick = ()=>{ mode = b.dataset.mode; inviteFromUrl = ''; draw(); }; });
+    $('regForm').onsubmit = (e)=>submitRegister(e, withCreds);
+  };
+  draw();
+}
+
+async function submitRegister(e, withCreds){
+  e.preventDefault();
+  const f = e.target, btn = f.querySelector('button[type=submit]'), err = $('authErr');
+  const q = (n)=>{ const x = f.querySelector(`[name="${n}"]`); return x ? x.value.trim() : ''; };
+  const mode = f.dataset.fmode;
+  const meta = { full_name: q('name'), relation: q('relation'), mode,
+    family_name: q('family'), invite_code: q('code').toUpperCase(), create_key: q('key').toUpperCase() };
+  const label = btn.textContent;
+  err.textContent = '';
+  if(!meta.full_name){ err.textContent = 'Ism familiyani kiriting'; return; }
+  if(!meta.relation){ err.textContent = "Oiladagi o'rningizni tanlang"; return; }
+  if(withCreds){
+    if(!q('email')){ err.textContent = 'Emailni kiriting'; return; }
+    if(f.querySelector('[name="password"]').value.length < 6){ err.textContent = "Parol kamida 6 belgidan iborat bo'lsin"; return; }
+  }
+  if(mode === 'join' && !meta.invite_code){ err.textContent = 'Taklif kodini kiriting'; return; }
+  if(mode === 'create' && (!meta.family_name || !meta.create_key)){ err.textContent = 'Oila nomi va yaratish kalitini kiriting'; return; }
+  btn.disabled = true; btn.textContent = 'Tekshirilmoqda…';
+  try{
+    unwrap(await sb.rpc('check_signup', { p_mode: mode, p_code: meta.invite_code, p_key: meta.create_key }));
+    if(withCreds){
+      const r = unwrap(await sb.auth.signUp({ email: q('email'), password: f.querySelector('[name="password"]').value, options: { data: meta } }));
+      if(!r.data.session){
+        renderAuth('login');
+        renderLoginForm($('authForm'), "Emailingizga tasdiqlash xati yuborildi. Havolani bosing, keyin shu yerdan kiring.");
+        return;
+      }
+      S.session = r.data.session;
+    } else {
+      unwrap(await sb.rpc('setup_profile', { p_name: meta.full_name, p_relation: meta.relation, p_mode: mode,
+        p_family_name: meta.family_name, p_code: meta.invite_code, p_key: meta.create_key }));
+    }
+    inviteFromUrl = '';
+    renderLoading();
+    await enter();
+  }catch(ex){
+    renderRegisterFormKeepError(ex, btn, label);
+  }
+}
+function renderRegisterFormKeepError(ex, btn, label){
+  const err = $('authErr');
+  if(err) err.textContent = errMsg(ex);
+  if(btn && btn.isConnected){ btn.disabled = false; btn.textContent = label; }
+}
+
+async function enter(){
+  try{
+    await loadAll();
+    renderRoot();
+  }catch(e){
+    console.error(e);
+    if(/jwt|refresh token|not authenticated/i.test(String(e && e.message))){ await doLogout(true); return; }
+    renderFatal(errMsg(e));
+  }
+}
+async function doLogout(silent){
+  try{ await sb.auth.signOut(); }catch(e){}
+  S.session = null; S.me = null; S.family = null; S.members = []; S.docs = []; inviteCache = null;
+  currentTab = 'docs'; viewMemberId = null; docsFilter = 'all';
+  renderAuth('login');
+  if(!silent) toast('Chiqdingiz');
+}
+
+/* ================= ASOSIY EKRANLAR ================= */
+function renderRoot(keep){
+  if(!S.session){ renderAuth('login'); return; }
+  if(!S.me){ renderSetup(); return; }
+  if(S.me.status !== 'approved'){ renderPending(); return; }
+  if(keep && $('content')){ renderNav(); renderContent(); updateChrome(); return; }
+  renderApp();
+}
+
+function renderSetup(){
+  $('app').innerHTML = `
+    <div class="auth solo"><div class="auth-form"><div class="auth-card">
+      <div class="brand-row">${STAR}<span class="brand-name">Oilani tanlang</span>${THEME_BTN}</div>
+      <p class="muted-line" style="margin-bottom:18px">Akkauntingiz hozir hech qaysi oilaga ulanmagan. Taklif kodi bilan qo'shiling yoki yangi oila yarating.</p>
+      <div id="authForm"></div>
+      <button class="btn btn-ghost btn-block" id="logoutBtn" style="margin-top:12px">Chiqish</button>
+    </div></div></div>`;
+  bindTheme();
+  renderRegisterForm($('authForm'), { withCreds: false });
+  $('logoutBtn').onclick = ()=>doLogout();
+}
+
+function renderPending(){
+  $('app').innerHTML = `
+    <div class="auth solo"><div class="auth-form"><div class="auth-card" style="text-align:center">
+      <div class="brand-row" style="justify-content:center">${STAR}</div>
+      <h2 style="font-size:24px;margin-bottom:10px">Admin tasdiqlashi kutilmoqda</h2>
+      <p class="muted-line" style="margin-bottom:22px">Siz <b>${escapeHtml(S.family ? S.family.name : '')}</b> oilasiga qo'shilish uchun so'rov yubordingiz.
+        Oila admini tasdiqlagach, hujjatlarga kirasiz.</p>
+      <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
+        <button class="btn btn-primary" id="checkBtn">Tekshirish</button>
+        <button class="btn btn-ghost" id="logoutBtn">Chiqish</button>
+      </div>
+    </div></div></div>`;
+  $('checkBtn').onclick = (e)=>act(e.currentTarget, async ()=>{ await loadAll(); renderRoot(); if(S.me && S.me.status !== 'approved') toast('Hali tasdiqlanmagan'); });
+  $('logoutBtn').onclick = ()=>doLogout();
+}
+
+function avatarHtml(m, cls){
+  return m.photo ? `<img src="${m.photo}" alt="">` : escapeHtml((m.name || '?').trim().charAt(0).toUpperCase());
+}
+
+function renderApp(){
+  const u = S.me;
+  $('app').innerHTML = `
+    <div class="app">
+      <aside class="side">
+        <div class="side-brand">${STAR}<span>Oila Hujjatlari</span></div>
+        <nav class="nav" id="nav" aria-label="Bo'limlar"></nav>
+      </aside>
+      <div class="main">
+        <header class="topbar">
+          <div class="top-fam"><small>Oila</small><div id="topFam">${escapeHtml(S.family.name)}</div></div>
+          <div class="header-right">
+            ${THEME_BTN}
+            <button class="user-chip" id="userChip" aria-label="Profil">
+              <div class="avatar-sm" id="chipAvatar">${avatarHtml(u)}</div>
+              <span id="chipName">${escapeHtml(u.name)}</span>
+            </button>
+          </div>
+        </header>
+        <main class="container" id="content"></main>
+      </div>
+    </div>`;
+  $('userChip').onclick = ()=>{ currentTab = 'profile'; viewMemberId = null; renderNav(); renderContent(); updateChrome(); window.scrollTo(0, 0); };
+  bindTheme();
+  bindContentEvents();
+  renderNav();
+  renderContent();
+  updateChrome();
+}
+function updateChrome(){
+  const chip = $('userChip'); if(!chip) return;
+  chip.classList.toggle('on', currentTab === 'profile');
+  $('topFam').textContent = S.family.name;
+  $('chipName').textContent = S.me.name;
+  $('chipAvatar').innerHTML = avatarHtml(S.me);
+}
+
+function renderNav(){
+  const items = [
+    { id:'docs', label:'Hujjatlarim', icon: IC.file },
+    { id:'members', label:"Oila a'zolari", icon: IC.users }
+  ];
+  if(isAdmin()) items.push({ id:'admin', label:'Admin', icon: IC.admin, badge: pendingMembers().length });
+  $('nav').innerHTML = items.map(it =>
+    `<button class="nav-btn ${it.id === currentTab ? 'active' : ''}" data-tab="${it.id}">${it.icon}<span>${it.label}</span>${it.badge ? `<span class="badge">${it.badge}</span>` : ''}</button>`).join('');
+}
+
+function renderContent(){
+  if(currentTab === 'admin' && !isAdmin()) currentTab = 'docs';
+  const c = $('content');
+  if(currentTab === 'docs') c.innerHTML = viewDocs();
+  else if(currentTab === 'members') c.innerHTML = viewMembers();
+  else if(currentTab === 'profile') c.innerHTML = viewProfile();
+  else if(currentTab === 'admin') c.innerHTML = viewAdmin();
+  if(currentTab === 'admin') loadInvite();
+}
+
+function emptyState(title, sub){
+  return `<div class="empty">${IC.folder}<h3>${title}</h3><p>${sub}</p></div>`;
+}
+
+function extLabel(d){
+  const mime = d.mime || '';
+  if(mime.startsWith('image/')) return 'RASM';
+  if(mime === 'application/pdf') return 'PDF';
+  if(mime.startsWith('text/')) return 'TXT';
+  const m = (d.file_name || '').match(/\.([a-z0-9]{1,5})$/i);
+  return m ? m[1].toUpperCase() : 'FAYL';
+}
+function docFileName(d){
+  if(d.file_name) return d.file_name;
+  const map = {'application/pdf':'.pdf','image/jpeg':'.jpg','image/png':'.png','image/webp':'.webp','text/plain':'.txt'};
+  return d.title + (map[d.mime] || '');
+}
+
+function docCard(d, canDelete){
+  return `<div class="doc-card" data-act="doc-open" data-id="${d.id}" role="button" tabindex="0">
+    <div class="doc-top">
+      <div class="doc-ico">${(d.mime || '').startsWith('image/') ? IC.image : IC.file}</div>
+      <span class="doc-ext">${escapeHtml(extLabel(d))}</span>
+      ${canDelete ? `<button class="doc-del" data-act="doc-del" data-id="${d.id}" title="O'chirish" aria-label="O'chirish">${IC.trash}</button>` : ''}
+    </div>
+    <div class="doc-bottom">
+      <div class="doc-body">
+        <div class="doc-title">${escapeHtml(d.title)}</div>
+        <div class="doc-meta">${formatSize(d.size)} · ${formatDate(d.created_at)}</div>
+        <div class="doc-tags">
+          ${d.visibility === 'private' ? '<span class="tag tag-private">Yashirin</span>' : '<span class="tag tag-family">Oila</span>'}
+        </div>
+      </div>
+      <span class="go" aria-hidden="true">${IC.arrow}</span>
+    </div>
+  </div>`;
+}
+
+/* ---------- Hujjatlarim ---------- */
+function viewDocs(){
+  const all = docsOf(S.me.id);
+  const docs = docsFilter === 'all' ? all : all.filter(d=>d.visibility === docsFilter);
+  const first = (S.me.name || '').split(' ')[0];
+  const cat = (id, icon, label)=>`<button class="cat ${docsFilter === id ? 'on' : ''}" data-act="cat" data-id="${id}">${icon}<span>${label}</span></button>`;
+  return `
+    <div class="page-head">
+      <div><h1>${greeting()},<br>${escapeHtml(first)}</h1><p class="page-sub">${escapeHtml(S.family.name)}</p></div>
+      <button class="btn btn-primary fab" data-act="upload">${IC.plus}<span>Hujjat yuklash</span></button>
+    </div>
+    <h2 class="sec-title">Mening hujjatlarim</h2>
+    <div class="cats" role="group" aria-label="Filtr">
+      ${cat('all', IC.grid, 'Barchasi')}${cat('family', IC.users, 'Oilaga')}${cat('private', IC.lock, 'Yashirin')}
+    </div>
+    <div style="height:14px"></div>
+    ${docs.length
+      ? `<div class="doc-grid">${docs.map(d=>docCard(d, true)).join('')}</div>`
+      : emptyState(all.length ? "Bu bo'limda hujjat yo'q" : 'Hali hujjat yuklanmagan', all.length ? 'Boshqa filtrni tanlang' : 'PDF, rasm yoki istalgan faylni yuklang')}`;
+}
+
+/* ---------- Oila a'zolari ---------- */
+function memberCard(m, link){
+  const n = docsOf(m.id).length;
+  const me = m.id === S.me.id;
+  return `<div class="member-card ${me ? 'me' : ''} ${link ? 'link' : ''}" ${link ? `data-act="member-open" data-id="${m.id}" role="button" tabindex="0"` : ''}>
+    <div class="avatar-lg">${avatarHtml(m)}</div>
+    <div style="min-width:0">
+      <div class="member-name">${escapeHtml(m.name)}${me ? ' <span class="you">siz</span>' : ''}</div>
+      <div class="member-role">${m.relation ? escapeHtml(m.relation) : "A'zo"}${m.role === 'admin' ? ' · Admin' : ''}</div>
+      <div class="member-line">${escapeHtml(m.email)}</div>
+      ${m.phone ? `<div class="member-line">${escapeHtml(m.phone)}</div>` : ''}
+      ${m.gmail ? `<div class="member-line">${escapeHtml(m.gmail)}</div>` : ''}
+      ${link ? `<span class="member-count">${n} ta hujjat</span>` : ''}
+    </div>
+  </div>`;
+}
+function viewMembers(){
+  if(viewMemberId){
+    const m = approvedMembers().find(x=>x.id === viewMemberId);
+    if(m){
+      const docs = docsOf(m.id), self = m.id === S.me.id;
+      return `
+        <button class="back" data-act="back">&#8592; Oila a'zolari</button>
+        <div class="detail-head">${memberCard(m, false)}</div>
+        <h2 class="sec-title">${self ? 'Mening hujjatlarim' : escapeHtml(m.name) + ' hujjatlari'}</h2>
+        ${docs.length
+          ? `<div class="doc-grid">${docs.map(d=>docCard(d, self)).join('')}</div>`
+          : emptyState("Hujjat yo'q", self ? 'Siz hali hujjat yuklamagansiz' : "Bu a'zo oilaga ochiq hujjat yuklamagan")}`;
+    }
+    viewMemberId = null;
+  }
+  const ms = approvedMembers();
+  return `
+    <div class="page-head"><div><h1>Oila a'zolari</h1>
+      <p class="page-sub">${escapeHtml(S.family.name)} · ${ms.length} kishi. Hujjatlarini ko'rish uchun a'zoni tanlang.</p></div></div>
+    <div class="member-grid">${ms.map(m=>memberCard(m, true)).join('')}</div>`;
+}
+
+/* ---------- Profil ---------- */
+function isStandalone(){
+  try{ return window.navigator.standalone === true || window.matchMedia('(display-mode: standalone)').matches; }catch(e){ return false; }
+}
+function viewProfile(){
+  const u = S.me;
+  const iosHint = (!isStandalone() && /iphone|ipad|ipod/i.test(navigator.userAgent)) ? `
+    <div class="card">
+      <h3>Telefonga o'rnatish</h3>
+      <p class="muted-line">Safari'da pastdagi «Ulashish» tugmasini bosing, so'ng «Bosh ekranga qo'shish»ni tanlang. Ilova oddiy ilova kabi ochiladi.</p>
+    </div>` : '';
+  return `
+    <div class="page-head"><div><h1>Profil</h1><p class="page-sub">Shaxsiy ma'lumotlaringiz</p></div></div>
+
+    <div class="card">
+      <h3>Shaxsiy ma'lumotlar</h3>
+      <div class="photo-row">
+        <div class="photo-preview">${u.photo ? `<img src="${u.photo}" alt="">` : '3×4'}</div>
+        <div>
+          <label class="btn btn-ghost btn-sm" style="cursor:pointer">
+            3×4 surat yuklash
+            <input type="file" id="photoInput" accept="image/*" hidden>
+          </label>
+          <div class="hint">Rasm avtomatik siqiladi</div>
+        </div>
+      </div>
+      <form id="profileForm">
+        <div class="field"><label for="pName">Ism familiya</label>
+          <input class="input" id="pName" value="${escapeHtml(u.name)}" required maxlength="80"></div>
+        <div class="form-row">
+          <div class="field"><label for="pPhone">Telefon raqam</label>
+            <input class="input" id="pPhone" type="tel" value="${escapeHtml(u.phone || '')}" placeholder="+998 90 123 45 67" maxlength="40"></div>
+          <div class="field"><label for="pGmail">Gmail</label>
+            <input class="input" id="pGmail" type="email" value="${escapeHtml(u.gmail || '')}" placeholder="ism@gmail.com" maxlength="120" autocapitalize="none"></div>
+        </div>
+        <div class="field"><label for="pEmail">Email (login)</label>
+          <input class="input" id="pEmail" value="${escapeHtml(u.email)}" disabled></div>
+        <button class="btn btn-primary" type="submit">Saqlash</button>
+      </form>
+    </div>
+
+    <div class="card">
+      <h3>Parolni o'zgartirish</h3>
+      <form id="passForm">
+        <div class="form-row">
+          <div class="field"><label for="oldPass">Eski parol</label>
+            <input class="input" type="password" id="oldPass" required autocomplete="current-password"></div>
+          <div class="field"><label for="newPass">Yangi parol</label>
+            <input class="input" type="password" id="newPass" required minlength="6" autocomplete="new-password"></div>
+        </div>
+        <button class="btn btn-ghost" type="submit">Yangilash</button>
+      </form>
+    </div>
+
+    ${iosHint}
+
+    <div class="card">
+      <h3>Oila</h3>
+      <div style="font-size:16px;margin-bottom:4px"><b>${escapeHtml(S.family.name)}</b></div>
+      <div class="muted-line" style="margin-bottom:16px">Rol: ${u.role === 'admin' ? 'Admin' : "A'zo"}${u.relation ? ' · ' + escapeHtml(u.relation) : ''} · Qo'shilgan: ${formatDate(u.created_at)}</div>
+      <button class="btn btn-danger" data-act="logout">Chiqish</button>
+    </div>`;
+}
+
+/* ---------- Admin ---------- */
+function viewAdmin(){
+  const pending = pendingMembers(), ms = approvedMembers();
+  return `
+    <div class="page-head"><div><h1>Admin panel</h1><p class="page-sub">${escapeHtml(S.family.name)}</p></div></div>
+
+    <div class="card">
+      <h3>Qo'shilish so'rovlari ${pending.length ? `(${pending.length})` : ''}</h3>
+      ${pending.length ? pending.map(p=>`
+        <div class="list-item">
+          <div>
+            <div class="list-item-title">${escapeHtml(p.name)}${p.relation ? ` <span class="tag tag-family" style="margin-left:6px">${escapeHtml(p.relation)}</span>` : ''}</div>
+            <div class="list-item-sub">${escapeHtml(p.email)} · ${formatDate(p.created_at)}</div>
+          </div>
+          <div class="row-actions">
+            <button class="btn btn-primary btn-sm" data-act="approve" data-id="${p.id}">Tasdiqlash</button>
+            <button class="btn btn-danger btn-sm" data-act="reject" data-id="${p.id}">Rad etish</button>
+          </div>
+        </div>`).join('') : `<div class="muted-line">Yangi so'rov yo'q</div>`}
+    </div>
+
+    <div class="card">
+      <h3>Taklif kodi</h3>
+      <p class="muted-line">Oila a'zolari «Ro'yxatdan o'tish → Oilaga qo'shilish» bo'limida shu kodni kiritadi. Kirgach siz tasdiqlaysiz.</p>
+      <div class="invite-code" id="inviteCode">••••••••••</div>
+      <div class="row-actions">
+        <button class="btn btn-primary btn-sm" data-act="invite-share">${IC.share}Ulashish</button>
+        <button class="btn btn-ghost btn-sm" data-act="invite-copy">${IC.copy}Nusxa olish</button>
+        <button class="btn btn-ghost btn-sm" data-act="invite-regen">Yangi kod</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>A'zolar va tartib (${ms.length})</h3>
+      <div class="note">A'zolar shu tartibda ko'rinadi: tepada ota va ona, pastda kichik farzand. Strelkalar bilan tartibni o'zgartiring.</div>
+      ${ms.map((m,i)=>`
+        <div class="list-item">
+          <div>
+            <div class="list-item-title">${escapeHtml(m.name)}${m.role === 'admin' ? ' <span class="tag tag-family" style="margin-left:6px">Admin</span>' : ''}</div>
+            <div class="list-item-sub">${escapeHtml(m.email)}</div>
+          </div>
+          <div class="row-actions">
+            <select class="input sel" data-rel="${m.id}" aria-label="Oiladagi o'rni">${relOptions(m.relation, true)}</select>
+            <button class="btn btn-ghost btn-sm" data-act="move" data-id="${m.id}" data-dir="-1" ${i === 0 ? 'disabled' : ''} aria-label="Yuqoriga">${IC.up}</button>
+            <button class="btn btn-ghost btn-sm" data-act="move" data-id="${m.id}" data-dir="1" ${i === ms.length - 1 ? 'disabled' : ''} aria-label="Pastga">${IC.down}</button>
+            ${m.id !== S.me.id ? `<button class="btn btn-ghost btn-sm" data-act="transfer" data-id="${m.id}">Adminlikni berish</button>
+              <button class="btn btn-danger btn-sm" data-act="remove" data-id="${m.id}">Chiqarish</button>` : ''}
+          </div>
+        </div>`).join('')}
+    </div>
+
+    <div class="card">
+      <h3>Oila nomi</h3>
+      <form id="familyForm">
+        <div class="field"><label for="famName" class="hint" style="margin:0 0 6px;display:block">Yangi nom</label>
+          <input class="input" id="famName" value="${escapeHtml(S.family.name)}" required maxlength="80"></div>
+        <button class="btn btn-ghost" type="submit">Saqlash</button>
+      </form>
+    </div>`;
+}
+
+async function loadInvite(){
+  try{
+    if(inviteCache === null){ const r = unwrap(await sb.rpc('get_invite_code')); inviteCache = r.data || ''; }
+    const el = $('inviteCode'); if(el) el.textContent = inviteCache || '—';
+  }catch(e){ const el = $('inviteCode'); if(el) el.textContent = '—'; }
+}
+
+/* ================= HODISALAR (event delegation) ================= */
+function bindContentEvents(){
+  const c = $('content');
+  c.onclick = (e)=>{
+    const t = e.target.closest('[data-act]');
+    if(t) handleAct(t, e);
+  };
+  c.onkeydown = (e)=>{
+    if((e.key === 'Enter' || e.key === ' ') && e.target.matches('[data-act]') && e.target.tagName !== 'BUTTON'){ e.preventDefault(); e.target.click(); }
+  };
+  c.onchange = (e)=>{
+    const t = e.target;
+    if(t.matches('[data-rel]')) act(t, async ()=>{ unwrap(await sb.rpc('set_relation', { p_id: t.dataset.rel, p_relation: t.value })); await loadAll(); toast("Oiladagi o'rni yangilandi"); renderContent(); });
+    if(t.id === 'photoInput') onPhoto(t);
+  };
+  c.onsubmit = (e)=>{
+    e.preventDefault();
+    const id = e.target.id, btn = e.target.querySelector('button[type=submit]');
+    if(id === 'profileForm') act(btn, saveProfile);
+    if(id === 'passForm') act(btn, ()=>changePassword(e.target));
+    if(id === 'familyForm') act(btn, saveFamilyName);
+  };
+  $('nav').onclick = (e)=>{
+    const b = e.target.closest('[data-tab]'); if(!b) return;
+    currentTab = b.dataset.tab; viewMemberId = null; renderNav(); renderContent(); updateChrome(); window.scrollTo(0, 0);
+  };
+}
+
+function handleAct(t, e){
+  const a = t.dataset.act, id = t.dataset.id;
+  if(a === 'upload') return openUpload();
+  if(a === 'doc-open'){ if(e.target.closest('[data-act="doc-del"]')) return; return openDoc(id); }
+  if(a === 'doc-del'){ e.stopPropagation(); return deleteDoc(id, t); }
+  if(a === 'cat'){ docsFilter = id; return renderContent(); }
+  if(a === 'member-open'){ viewMemberId = id; renderContent(); window.scrollTo(0, 0); return; }
+  if(a === 'back'){ viewMemberId = null; return renderContent(); }
+  if(a === 'logout') return doLogout();
+  if(a === 'approve') return act(t, async ()=>{ unwrap(await sb.rpc('approve_member', { p_id: id })); await loadAll(); renderNav(); renderContent(); toast("A'zo oilaga qo'shildi"); });
+  if(a === 'reject') return act(t, async ()=>{
+    const m = memberById(id); if(!m) return;
+    if(!(await askConfirm("So'rovni rad etasizmi?", `${m.name} so'rovi o'chiriladi.`, 'Rad etish'))) return;
+    unwrap(await sb.rpc('reject_member', { p_id: id })); await loadAll(); renderNav(); renderContent();
+  });
+  if(a === 'remove') return act(t, ()=>removeMember(id));
+  if(a === 'move') return act(t, async ()=>{ unwrap(await sb.rpc('move_member', { p_id: id, p_dir: Number(t.dataset.dir) })); await loadAll(); renderContent(); });
+  if(a === 'transfer') return act(t, ()=>transferAdmin(id));
+  if(a === 'invite-share') return act(t, shareInvite);
+  if(a === 'invite-copy') return act(t, async ()=>{ await loadInvite(); await copyText(inviteText()); toast('Taklif nusxalandi'); });
+  if(a === 'invite-regen') return act(t, regenInvite);
+}
+
+/* ================= AMALLAR ================= */
+async function saveProfile(){
+  const name = $('pName').value.trim();
+  if(!name){ toast('Ism familiyani kiriting'); return; }
+  unwrap(await sb.from('profiles').update({ name, phone: $('pPhone').value.trim(), gmail: $('pGmail').value.trim() }).eq('id', S.me.id));
+  await loadAll(); updateChrome(); toast('Profil saqlandi');
+}
+
+async function changePassword(form){
+  const oldp = $('oldPass').value, newp = $('newPass').value;
+  if(newp.length < 6){ toast("Yangi parol kamida 6 belgidan iborat bo'lsin"); return; }
+  const chk = await sb.auth.signInWithPassword({ email: S.session.user.email, password: oldp });
+  if(chk.error){ toast('Eski parol xato'); return; }
+  unwrap(await sb.auth.updateUser({ password: newp }));
+  form.reset(); toast("Parol o'zgartirildi");
+}
+
+async function saveFamilyName(){
+  const v = $('famName').value.trim(); if(!v) return;
+  unwrap(await sb.rpc('rename_family', { p_name: v }));
+  await loadAll(); updateChrome(); toast('Oila nomi yangilandi');
+}
+
+function resizeImage(file, maxSize){
+  maxSize = maxSize || 400;
+  return new Promise((resolve, reject)=>{
+    const img = new Image(), reader = new FileReader();
+    reader.onload = ()=>{ img.src = reader.result; };
+    reader.onerror = ()=>reject(reader.error);
+    img.onerror = ()=>reject(new Error('Rasmni o\'qib bo\'lmadi'));
+    img.onload = ()=>{
+      let w = img.width, h = img.height;
+      if(w > h){ if(w > maxSize){ h = h * maxSize / w; w = maxSize; } } else { if(h > maxSize){ w = w * maxSize / h; h = maxSize; } }
+      const cv = document.createElement('canvas'); cv.width = Math.round(w); cv.height = Math.round(h);
+      cv.getContext('2d').drawImage(img, 0, 0, cv.width, cv.height);
+      resolve(cv.toDataURL('image/jpeg', 0.8));
+    };
+    reader.readAsDataURL(file);
+  });
+}
+function onPhoto(input){
+  const f = input.files && input.files[0]; if(!f) return;
+  act(input, async ()=>{
+    const photo = await resizeImage(f, 400);
+    unwrap(await sb.from('profiles').update({ photo }).eq('id', S.me.id));
+    await loadAll(); updateChrome(); renderContent(); toast('Surat yangilandi');
+  });
+}
+
+/* ---------- Yuklash ---------- */
+function openUpload(){
+  showModal(`
+    <div class="modal-head"><h3>Hujjat yuklash</h3>${CLOSE_BTN}</div>
+    <form id="uploadForm">
+      <div class="field"><label for="upTitle">Nomi</label>
+        <input class="input" id="upTitle" required maxlength="120" placeholder="Masalan: Passport nusxasi"></div>
+      <div class="field"><label for="upFile">Fayl (PDF, rasm, Word yoki boshqa, 10 MB gacha)</label>
+        <input class="input" type="file" id="upFile" required></div>
+      <div class="field">
+        <label>Kim ko'ra oladi?</label>
+        <div class="radio-row">
+          <label class="radio"><input type="radio" name="vis" value="family" checked><span>Butun oila</span></label>
+          <label class="radio"><input type="radio" name="vis" value="private"><span>Faqat men</span></label>
+        </div>
+      </div>
+      <button class="btn btn-primary btn-block" type="submit">Yuklash</button>
+    </form>`, null, (root)=>{
+    root.querySelector('#upFile').onchange = (e)=>{
+      const f = e.target.files[0], t = root.querySelector('#upTitle');
+      if(f && !t.value.trim()) t.value = f.name.replace(/\.[^.]+$/, '').slice(0, 120);
+    };
+    root.querySelector('#uploadForm').onsubmit = async (e)=>{
+      e.preventDefault();
+      const btn = e.target.querySelector('button[type=submit]');
+      const title = root.querySelector('#upTitle').value.trim();
+      const file = root.querySelector('#upFile').files[0];
+      const vis = root.querySelector('input[name="vis"]:checked').value;
+      if(!title || !file) return;
+      if(file.size > MAX_FILE){ toast('Fayl hajmi 10 MB dan oshmasin'); return; }
+      if(file.size === 0){ toast("Fayl bo'sh"); return; }
+      btn.disabled = true; btn.textContent = 'Yuklanmoqda…';
+      const id = uuid(), path = `${S.me.family_id}/${S.me.id}/${id}`;
+      try{
+        unwrap(await sb.from('documents').insert({ id, family_id: S.me.family_id, owner_id: S.me.id, title,
+          file_name: file.name, mime: file.type || 'application/octet-stream', size: file.size, visibility: vis, storage_path: path }));
+        const up = await sb.storage.from(BUCKET).upload(path, file, { contentType: file.type || 'application/octet-stream', upsert: false });
+        if(up.error){
+          await sb.from('documents').delete().eq('id', id);
+          throw up.error;
+        }
+        await loadAll();
+        closeModal(); renderNav(); renderContent();
+        toast('Hujjat yuklandi');
+      }catch(ex){
+        console.error(ex); toast(errMsg(ex));
+        if(btn.isConnected){ btn.disabled = false; btn.textContent = 'Yuklash'; }
+      }
+    };
+  });
+}
+
+/* ---------- Ko'rish / yuklab olish ---------- */
+async function saveBlob(blob, filename){
+  const file = new File([blob], filename, { type: blob.type || 'application/octet-stream' });
+  try{
+    if(navigator.canShare && navigator.canShare({ files: [file] })){
+      await navigator.share({ files: [file], title: filename });
+      return;
+    }
+  }catch(e){ if(e && e.name === 'AbortError') return; }
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a'); a.href = url; a.download = filename;
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(()=>URL.revokeObjectURL(url), 30000);
+}
+
+async function openDoc(id){
+  const d = S.docs.find(x=>x.id === id); if(!d) return;
+  const own = d.owner_id === S.me.id;
+  let objUrl = null, blob = null, gone = false;
+  showModal(`
+    <div class="modal-head"><h3>${escapeHtml(d.title)}</h3>${CLOSE_BTN}</div>
+    <div class="preview" id="pv"><div class="preview-load"><div class="spin"></div></div></div>
+    ${own ? `<div class="radio-row" style="margin-bottom:16px">
+      <label class="radio"><input type="radio" name="dvis" value="family" ${d.visibility === 'family' ? 'checked' : ''}><span>Butun oila</span></label>
+      <label class="radio"><input type="radio" name="dvis" value="private" ${d.visibility === 'private' ? 'checked' : ''}><span>Faqat men</span></label>
+    </div>` : ''}
+    <div class="modal-foot">
+      <a class="btn btn-ghost" id="openTab" target="_blank" rel="noopener" hidden>Ochish</a>
+      <button class="btn btn-primary" id="dlBtn" disabled>Yuklab olish</button>
+    </div>`, ()=>{ gone = true; if(objUrl) URL.revokeObjectURL(objUrl); }, async (root)=>{
+    if(own) root.querySelectorAll('input[name="dvis"]').forEach(r=>{
+      r.onchange = ()=>act(r, async ()=>{
+        unwrap(await sb.from('documents').update({ visibility: r.value }).eq('id', d.id));
+        await loadAll(); toast(r.value === 'private' ? "Endi faqat o'zingiz ko'rasiz" : 'Endi butun oila ko\'ra oladi');
+      });
+    });
+    try{
+      const dl = unwrap(await sb.storage.from(BUCKET).download(d.storage_path));
+      if(gone) return;
+      blob = new Blob([dl.data], { type: d.mime || dl.data.type || 'application/octet-stream' });
+      objUrl = URL.createObjectURL(blob);
+      const pv = root.querySelector('#pv');
+      if((d.mime || '').startsWith('image/')) pv.innerHTML = `<img src="${objUrl}" alt="">`;
+      else if(d.mime === 'application/pdf') pv.innerHTML = `<iframe src="${objUrl}" title="${escapeHtml(d.title)}"></iframe>`;
+      else if((d.mime || '').startsWith('text/')) pv.innerHTML = `<pre class="preview-text">${escapeHtml(await blob.text())}</pre>`;
+      else pv.innerHTML = `<div class="preview-none">Bu formatni ko'rib bo'lmaydi.<br>Yuklab oling.</div>`;
+      const tab = root.querySelector('#openTab');
+      if((d.mime || '').startsWith('image/') || d.mime === 'application/pdf'){ tab.href = objUrl; tab.hidden = false; }
+      const b = root.querySelector('#dlBtn'); b.disabled = false;
+      b.onclick = ()=>act(b, ()=>saveBlob(blob, docFileName(d)));
+    }catch(ex){
+      console.error(ex);
+      const pv = root.querySelector('#pv');
+      if(pv) pv.innerHTML = `<div class="preview-none">Faylni yuklab bo'lmadi.<br>${escapeHtml(errMsg(ex))}</div>`;
+    }
+  });
+}
+
+async function deleteDoc(id, btn){
+  const d = S.docs.find(x=>x.id === id); if(!d || d.owner_id !== S.me.id) return;
+  if(!(await askConfirm("Hujjatni o'chirasizmi?", `"${d.title}" butunlay o'chiriladi. Buni qaytarib bo'lmaydi.`, "O'chirish"))) return;
+  await act(btn, async ()=>{
+    unwrap(await sb.storage.from(BUCKET).remove([d.storage_path]));
+    unwrap(await sb.from('documents').delete().eq('id', id));
+    await loadAll(); renderNav(); renderContent(); toast("Hujjat o'chirildi");
+  });
+}
+
+/* ---------- Admin amallari ---------- */
+async function removeMember(id){
+  const m = memberById(id); if(!m) return;
+  if(!(await askConfirm("A'zoni chiqarasizmi?", `${m.name} oiladan chiqariladi va uning hujjatlari o'chiriladi.`, 'Chiqarish'))) return;
+  const r = unwrap(await sb.rpc('remove_member', { p_id: id }));
+  const paths = Array.isArray(r.data) ? r.data : [];
+  let warn = false;
+  if(paths.length){
+    const rm = await sb.storage.from(BUCKET).remove(paths);
+    if(rm.error) warn = true;
+  }
+  await loadAll(); renderNav(); renderContent();
+  toast(warn ? "A'zo chiqarildi, lekin ba'zi fayllarni ombordan o'chirib bo'lmadi" : "A'zo chiqarildi");
+}
+
+async function transferAdmin(id){
+  const m = memberById(id); if(!m) return;
+  if(!(await askConfirm('Adminlikni berasizmi?', `${m.name} yangi admin bo'ladi. Siz oddiy a'zo bo'lasiz va Admin bo'limi sizdan olinadi.`, 'Adminlikni berish'))) return;
+  unwrap(await sb.rpc('transfer_admin', { p_id: id }));
+  inviteCache = null; currentTab = 'docs';
+  await loadAll(); renderRoot(true); toast(`${m.name} endi oila admini`);
+}
+
+function inviteText(){
+  const url = location.origin + location.pathname + '?code=' + encodeURIComponent(inviteCache || '');
+  return `${S.family.name} oilasining hujjatlar ilovasiga qo'shiling.\nTaklif kodi: ${inviteCache}\n${url}`;
+}
+async function copyText(text){
+  try{ await navigator.clipboard.writeText(text); return; }catch(e){}
+  const ta = document.createElement('textarea'); ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0';
+  document.body.appendChild(ta); ta.select(); try{ document.execCommand('copy'); }catch(e){} ta.remove();
+}
+async function shareInvite(){
+  await loadInvite();
+  if(!inviteCache){ toast('Kodni olib bo\'lmadi'); return; }
+  const text = inviteText();
+  if(navigator.share){
+    try{ await navigator.share({ title: 'Oila Hujjatlari', text }); return; }
+    catch(e){ if(e && e.name === 'AbortError') return; }
+  }
+  await copyText(text); toast('Taklif nusxalandi');
+}
+async function regenInvite(){
+  if(!(await askConfirm('Yangi kod yaratasizmi?', "Eski kod ishlamay qoladi. Allaqachon qo'shilganlarga ta'sir qilmaydi.", 'Yangi kod'))) return;
+  const r = unwrap(await sb.rpc('regenerate_invite'));
+  inviteCache = r.data; const el = $('inviteCode'); if(el) el.textContent = inviteCache;
+  toast('Yangi kod yaratildi');
+}
+
+/* ================= ISHGA TUSHIRISH ================= */
+async function boot(){
+  bindTheme();
+  try{
+    const p = new URLSearchParams(location.search);
+    const c = (p.get('code') || '').trim().toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 10);
+    if(c){ inviteFromUrl = c; history.replaceState(null, '', location.pathname); }
+  }catch(e){}
+  if('serviceWorker' in navigator && /^https?:$/.test(location.protocol)){
+    navigator.serviceWorker.register('sw.js').catch(()=>{});
+  }
+  if(!CONFIGURED){ renderNotConfigured(); return; }
+  try{ await window.__sbReady; }
+  catch(e){ renderFatal("Kerakli kutubxona yuklanmadi. Internetni tekshirib, qayta urinib ko'ring."); return; }
+  sb = window.supabase.createClient(CFG.SUPABASE_URL, CFG.SUPABASE_ANON_KEY, {
+    auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: false }
+  });
+  sb.auth.onAuthStateChange((event, session)=>{
+    S.session = session;
+    if(event === 'SIGNED_OUT' && S.me){ S.me = null; setTimeout(()=>renderAuth('login'), 0); }
+  });
+  let session = null;
+  try{ const r = await sb.auth.getSession(); session = r.data && r.data.session; }catch(e){}
+  S.session = session;
+  if(!session){ renderAuth(inviteFromUrl ? 'register' : 'login'); return; }
+  await enter();
+}
+
+/* ilovaga qaytganda ma'lumotlarni yangilaydi */
+document.addEventListener('visibilitychange', ()=>{
+  if(document.visibilityState === 'visible' && S.session && S.me && Date.now() - S.loadedAt > 20000) refresh(true);
+});
+window.addEventListener('online', ()=>{ if(S.session && S.me) refresh(true); });
+
+boot();
+</script>
+</body>
+</html>
