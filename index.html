@@ -100,6 +100,9 @@
   select.input{appearance:none;-webkit-appearance:none;padding-right:42px;
     background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2392929a' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
     background-repeat:no-repeat;background-position:right 16px center}
+  .linkbtn{background:none;border:none;color:var(--accent-text);font-weight:700;font-size:14.5px;cursor:pointer;padding:6px 0;margin-top:14px;display:block;width:100%;text-align:center}
+  .linkbtn:hover{text-decoration:underline}
+  .linkbtn:disabled{color:var(--muted);cursor:default;text-decoration:none}
   .code-input{font-family:var(--font-d);font-weight:700;letter-spacing:.14em;text-transform:uppercase}
   .err{color:var(--danger);font-size:14px;margin-bottom:12px;min-height:20px}
 
@@ -549,7 +552,9 @@ function renderLoginForm(el, notice){
         <input class="input" type="password" id="loginPass" required placeholder="••••••" autocomplete="current-password"></div>
       <div class="err" id="authErr" role="alert"></div>
       <button class="btn btn-primary btn-block" type="submit">Kirish</button>
+      <button class="linkbtn" type="button" id="forgotBtn">Parolni unutdim?</button>
     </form>`;
+  $('forgotBtn').onclick = ()=>renderForgot(el, $('loginEmail').value.trim());
   $('loginForm').onsubmit = async (e)=>{
     e.preventDefault();
     const btn = e.target.querySelector('button[type=submit]'), err = $('authErr');
@@ -564,6 +569,90 @@ function renderLoginForm(el, notice){
     }catch(ex){
       err.textContent = errMsg(ex); btn.disabled = false; btn.textContent = 'Kirish';
       if($('authForm') === null) renderAuth('login');
+    }
+  };
+}
+
+/* ---------- Parolni unutdim: emailga 6 xonali kod ---------- */
+function renderForgot(el, emailPrefill){
+  el.innerHTML = `
+    <form id="fgForm" novalidate>
+      <p class="muted-line" style="margin-bottom:16px">Ro'yxatdan o'tgan emailingizni kiriting. Unga 6 xonali kod yuboramiz.</p>
+      <div class="field"><label for="fgEmail">Email</label>
+        <input class="input" type="email" id="fgEmail" required placeholder="siz@example.com" autocomplete="username" autocapitalize="none" inputmode="email" value="${escapeHtml(emailPrefill || '')}"></div>
+      <div class="err" id="authErr" role="alert"></div>
+      <button class="btn btn-primary btn-block" type="submit">Kod yuborish</button>
+      <button class="linkbtn" type="button" id="fgBack">Kirishga qaytish</button>
+    </form>`;
+  $('fgBack').onclick = ()=>renderAuth('login');
+  $('fgForm').onsubmit = async (e)=>{
+    e.preventDefault();
+    const btn = e.target.querySelector('button[type=submit]'), err = $('authErr');
+    const email = $('fgEmail').value.trim();
+    if(!email){ err.textContent = 'Emailni kiriting'; return; }
+    err.textContent = ''; btn.disabled = true; btn.textContent = 'Yuborilmoqda…';
+    try{
+      unwrap(await sb.auth.resetPasswordForEmail(email));
+      renderForgotCode(el, email, true);
+    }catch(ex){
+      err.textContent = errMsg(ex); btn.disabled = false; btn.textContent = 'Kod yuborish';
+    }
+  };
+}
+
+let fgTimer = null;
+function renderForgotCode(el, email, justSent){
+  el.innerHTML = `
+    <form id="fgCodeForm" novalidate>
+      <div class="notice">${justSent ? 'Agar bu email ro\'yxatdan o\'tgan bo\'lsa, ' : ''}<b>${escapeHtml(email)}</b> manziliga kod yuborildi. Xat kelmasa, «Spam» papkasini ham tekshiring.</div>
+      <div class="field"><label for="fgCode">Emailga kelgan kod</label>
+        <input class="input code-input" id="fgCode" inputmode="numeric" autocomplete="one-time-code" maxlength="10" placeholder="123456" required></div>
+      <div class="field"><label for="fgPass">Yangi parol</label>
+        <input class="input" type="password" id="fgPass" required minlength="6" placeholder="Kamida 6 belgi" autocomplete="new-password"></div>
+      <div class="field"><label for="fgPass2">Yangi parolni takrorlang</label>
+        <input class="input" type="password" id="fgPass2" required autocomplete="new-password"></div>
+      <div class="err" id="authErr" role="alert"></div>
+      <button class="btn btn-primary btn-block" type="submit">Parolni almashtirish</button>
+      <button class="linkbtn" type="button" id="fgResend">Kodni qayta yuborish</button>
+      <button class="linkbtn" type="button" id="fgBack" style="margin-top:2px">Kirishga qaytish</button>
+    </form>`;
+  $('fgBack').onclick = ()=>{ clearInterval(fgTimer); renderAuth('login'); };
+  const rs = $('fgResend');
+  const cooldown = (n)=>{
+    clearInterval(fgTimer); rs.disabled = true;
+    const tick = ()=>{ if(!rs.isConnected){ clearInterval(fgTimer); return; } if(n <= 0){ clearInterval(fgTimer); rs.disabled = false; rs.textContent = 'Kodni qayta yuborish'; return; } rs.textContent = 'Qayta yuborish: ' + n + ' s'; n--; };
+    tick(); fgTimer = setInterval(tick, 1000);
+  };
+  cooldown(60);
+  rs.onclick = async ()=>{
+    rs.disabled = true;
+    try{ unwrap(await sb.auth.resetPasswordForEmail(email)); toast('Kod qayta yuborildi'); }
+    catch(ex){ $('authErr').textContent = errMsg(ex); }
+    cooldown(60);
+  };
+  $('fgCodeForm').onsubmit = async (e)=>{
+    e.preventDefault();
+    const btn = e.target.querySelector('button[type=submit]'), err = $('authErr');
+    const code = $('fgCode').value.replace(/\s+/g, ''), p1 = $('fgPass').value, p2 = $('fgPass2').value;
+    if(!code){ err.textContent = 'Emailga kelgan kodni kiriting'; return; }
+    if(p1.length < 6){ err.textContent = "Yangi parol kamida 6 belgidan iborat bo'lsin"; return; }
+    if(p1 !== p2){ err.textContent = 'Parollar bir xil emas'; return; }
+    err.textContent = ''; btn.disabled = true; btn.textContent = 'Tekshirilmoqda…';
+    let verified = false;
+    try{
+      const v = await sb.auth.verifyOtp({ email, token: code, type: 'recovery' });
+      if(v.error) throw new Error('Kod noto\'g\'ri yoki muddati tugagan');
+      verified = true;
+      unwrap(await sb.auth.updateUser({ password: p1 }));
+      clearInterval(fgTimer);
+      S.session = v.data.session;
+      renderLoading();
+      await enter();
+      toast('Parol almashtirildi');
+    }catch(ex){
+      if(verified){ try{ await sb.auth.signOut(); }catch(_){} S.session = null; }
+      err.textContent = verified ? errMsg(ex) + '. Qayta kod oling.' : errMsg(ex);
+      if(btn.isConnected){ btn.disabled = false; btn.textContent = 'Parolni almashtirish'; }
     }
   };
 }
